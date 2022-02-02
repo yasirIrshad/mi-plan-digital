@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>Mi plan digital</title>
+    <meta content="Admin Dashboard" name="description" />
+    <meta content="ThemeDesign" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .card-header {
+            display: flex;
+            justify-content: center;
+            background-color: #DEEEFC;
+            font-size: 14px;
+            font-weight: 500;
+            color: #092E6F;
+        }
+
+        .card-header .pay,
+        .card-header .sum,
+        .card-header .spend,
+        .card-header .equal,
+        .card-header .total {
+            display: flex;
+        }
+
+        .card-header .pay {
+            justify-content: center;
+            align-items: flex-end;
+            width: 80px;
+            height: 90px;
+            background-image: url('./../assets/images/egresos_paga.png');
+            background-position: center top;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-header .sum {
+            width: 27px;
+            height: 27px;
+            margin: 20px 16px;
+            background-image: url('./../assets/images/egresos_suma.png');
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-header .spend {
+            justify-content: center;
+            align-items: flex-end;
+            width: 80px;
+            height: 90px;
+            background-image: url('./../assets/images/egresos_gasta.png');
+            background-position: center top;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-header .equal {
+            width: 27px;
+            height: 27px;
+            margin: 20px 16px;
+            background-image: url('./../assets/images/egresos_igual.png');
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-header .total {
+            width: 60px;
+            height: 66px;
+            background-image: url('./../assets/images/egresos_total.png');
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body .title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #252129;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .card-body .paragraph {
+            display: block;
+            font-size: 13px;
+            color: #707070;
+        }
+
+        .card-body .title .icon {
+            display: flex;
+            width: 69px;
+            height: 63px;
+        }
+
+        .card-body .title .icon.pay {
+            background-image: url('./../assets/images/egresos_paga_texto.png');
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-body .title .icon.spend {
+            background-image: url('./../assets/images/egresos_gasta_texto.png');
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .card-body .title .text {
+            display: flex;
+            margin-left: 20px;
+        }
+
+        .card-body .paragraph {
+            margin: -5px 0 0 89px;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Begin page -->
+    <div class="container-fluid" id="pageId">
+
+        <div class="row">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 offset-sm-1 offset-md-2 offset-lg-3">
+
+                <div class="alert alert-danger mb-0 mt-3 mt-md-5" role="alert" v-if="showAuthMsg">
+                    <strong>Oh seguridad!</strong> debe estar logueado para poder usar esta app.
+                </div>
+
+                <form class="mt-3 mt-md-5" v-if="!showAuthMsg">
+
+                    <div class="card m-b-30 mx-auto">
+                        <h5 class="card-header mt-0">
+                            <div class="pay">
+                                <span>Paga</span>
+                            </div>
+                            <div class="sum"></div>
+                            <div class="spend">
+                                <span>Gasta</span>
+                            </div>
+                            <div class="equal"></div>
+                            <div class="total"></div>
+                        </h5>
+                        <div class="card-body">
+                            <div class="title">
+                                <div class="icon pay"></div>
+                                <div class="text">Paga</div>
+                            </div>
+                            <p class="paragraph">Es la parte de tu ingreso destinada a aquellos gastos personales <strong>esenciales o que estén bajo contrato</strong>. Tales como, alquiler o cuota hipotecaria, mercado, servicios públicos, transporte, deudas financieras, educación, entre otros</p>
+                            <div class="title mt-3">
+                                <div class="icon spend"></div>
+                                <div class="text">Gasta</div>
+                            </div>
+                            <p class="paragraph">Es la parte de tu ingreso destinada a aquellos gastos no tan esenciales y sobre los cuales tienes un mayor control. Por ejemplo, entretenimiento y ocio, restaurantes, vestuario o aplicaciones</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-primary">Continuar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- jQuery  -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/detect.js"></script>
+    <script src="../assets/js/fastclick.js"></script>
+    <script src="../assets/js/jquery.slimscroll.js"></script>
+    <script src="../assets/js/jquery.blockUI.js"></script>
+    <script src="../assets/js/waves.js"></script>
+    <script src="../assets/js/jquery.nicescroll.js"></script>
+    <script src="../assets/js/jquery.scrollTo.min.js"></script>
+
+    <!-- App js -->
+    <script src="../assets/js/app.js"></script>
+
+    <!-- Vue js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="/__/firebase/8.2.7/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/8.2.7/firebase-auth.js"></script>
+    <!-- Initialize Firebase -->
+    <!-- <script src="/__/firebase/init.js?useEmulator=true"></script> -->
+    <script src="/__/firebase/init.js"></script>
+
+    <!-- App Auth js -->
+    <script src="../assets/js/default.js"></script>
+
+</body>
+
+</html>

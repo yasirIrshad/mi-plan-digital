@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>Mi plan digital</title>
+    <meta content="Admin Dashboard" name="description" />
+    <meta content="ThemeDesign" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+
+    <!-- X-editable css -->
+    <link type="text/css" href="../assets/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .card-header.title {
+            color: #6a91f0;
+            font-weight: 400;
+            background-color: transparent;
+        }
+
+        .card-header.sub-title {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem 18px 0.75rem;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .header-row .icon-title-holder {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-row .icon-title-holder .title {
+            margin-left: 10px;
+        }
+
+        .header-row .icon-title-holder .icon {
+            display: flex;
+            width: 25px;
+            height: 25px;
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .header-row .icon-title-holder .icon.house {
+            background-image: url('./assets/images/chat/group_input/X13.png');
+        }
+
+        .header-row .icon-title-holder .icon.health {
+            background-image: url('./assets/images/chat/group_input/X16.png');
+        }
+
+        .header-row .icon-title-holder .icon.education {
+            background-image: url('./assets/images/chat/group_input/X10.png');
+        }
+
+        .header-row .icon-title-holder .icon.entertaiment {
+            background-image: url('./assets/images/chat/group_input/X18.png');
+        }
+
+        .header-row .icon-title-holder .icon.internet-telephone {
+            background-image: url('./assets/images/chat/group_input/X19.png');
+        }
+
+        .header-row .icon-title-holder .icon.restaurant {
+            background-image: url('./assets/images/chat/group_input/X20.png');
+        }
+
+        .header-row .icon-title-holder .icon.third-services {
+            background-image: url('./assets/images/chat/group_input/X21.png');
+        }
+
+        .header-row .icon-title-holder .icon.clothing {
+            background-image: url('./assets/images/chat/group_input/X22.png');
+        }
+
+        .header-row .icon-title-holder .icon.vacation {
+            background-image: url('./assets/images/chat/group_input/X23.png');
+        }
+
+        .header-row .icon-title-holder .icon.personal-item {
+            background-image: url('./assets/images/chat/group_input/X24.png');
+        }
+
+        .header-row .icon-title-holder .icon.coffe-cup {
+            background-image: url('./assets/images/chat/group_input/X4.png');
+        }
+
+        .pay-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-left: 5px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #212529;
+        }
+
+        .pay-row:last-child {
+            margin-bottom: 0.5rem;
+        }
+
+        .pay-row .title {
+            flex: 1 0 0;
+        }
+
+        .title {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title span.popover {
+            height: 15px;
+            width: 15px;
+            margin-left: 4px;
+            background-color: #9d9d9d;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media only screen and (min-width: 576px) {
+            .pay-row {
+                margin-left: 70px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Begin page -->
+    <div class="container-fluid" id="formPay">
+
+        <div class="row">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 offset-sm-1 offset-md-2 offset-lg-3">
+
+                <div class="alert alert-danger mb-0 mt-3 mt-md-5" role="alert" v-if="showAuthMsg">
+                    <strong>Oh seguridad!</strong> debe estar logueado para poder usar esta app.
+                </div>
+
+                <form class="mt-3 mt-md-5" v-if="!showAuthMsg">
+
+                    <div class="card m-b-30 mx-auto">
+                        <h5 class="card-header title mt-0">{{title}}</h5>
+                        <h5 class="card-header sub-title mt-0">
+                            <div>{{model.monthly.header.name}}</div>
+                            <div>${{model.monthly.header.value}}/mes</div>
+                        </h5>
+                        <div class="card-body">
+                            <div v-for="child in model.monthly.children">
+                                <div class="header-row">
+                                    <div class="icon-title-holder">
+                                        <div class="icon" :class="classById(child.header.id)"></div>
+                                        <div class="title">
+                                            {{child.header.name}}
+                                            <span v-if="child.header.popover" class="popover waves-effect mo-mb-2" data-container="body" data-toggle="popover" data-placement="right" v-bind:data-content="child.header.popover">?</span>
+                                        </div>
+                                    </div>
+                                    <div class="total">${{child.header.value}}/mes</div>
+                                </div>
+                                <div class="pay-row" v-for="secondChild in child.children">
+                                    <div class="title">
+                                        {{secondChild.name}}
+                                        <span v-if="secondChild.popover" class="popover waves-effect mo-mb-2" data-container="body" data-toggle="popover" data-placement="top" v-bind:data-content="secondChild.popover">?</span>
+                                    </div>
+                                    <div class="amount">
+                                        $<a href="#" class="editable-field" :id="secondChild.id" data-type="number" data-pk="{{secondChild.id}}" data-title="{{secondChild.name}}">{{secondChild.value}}</a>/mes
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="card-header sub-title mt-0">
+                            <div>{{model.yearly.header.name}}</div>
+                            <div>${{model.yearly.header.value}}/año</div>
+                        </h5>
+                        <div class="card-body">
+                            <div v-for="child in model.yearly.children">
+                                <div class="header-row">
+                                    <div class="icon-title-holder">
+                                        <div class="icon" :class="classById(child.header.id)"></div>
+                                        <div class="title">
+                                            {{child.header.name}}
+                                            <span v-if="child.header.popover" class="popover waves-effect mo-mb-2" data-container="body" data-toggle="popover" data-placement="right" v-bind:data-content="child.header.popover">?</span>
+                                        </div>
+                                    </div>
+                                    <div class="total">${{child.header.value}}/año</div>
+                                </div>
+                                <div class="pay-row" v-for="secondChild in child.children">
+                                    <div class="title">
+                                        {{secondChild.name}}
+                                        <span v-if="secondChild.popover" class="popover waves-effect mo-mb-2" data-container="body" data-toggle="popover" data-placement="top" v-bind:data-content="secondChild.popover">?</span>
+                                    </div>
+                                    <div class="amount">
+                                        $<a href="#" class="editable-field" :id="secondChild.id" data-type="number" data-pk="{{secondChild.id}}" data-title="{{secondChild.name}}">{{secondChild.value}}</a>/año
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-primary">Continuar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- jQuery  -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/detect.js"></script>
+    <script src="../assets/js/fastclick.js"></script>
+    <script src="../assets/js/jquery.slimscroll.js"></script>
+    <script src="../assets/js/jquery.blockUI.js"></script>
+    <script src="../assets/js/waves.js"></script>
+    <script src="../assets/js/jquery.nicescroll.js"></script>
+    <script src="../assets/js/jquery.scrollTo.min.js"></script>
+
+    <!-- Bootstrap inputmask js -->
+    <script src="../assets/js/bootstrap-inputmask.min.js"></script>
+
+    <!-- XEditable Plugin -->
+    <script src="../assets/x-editable/js/bootstrap-editable.min.js"></script>
+
+    <!-- App js -->
+    <script src="../assets/js/app.js"></script>
+
+    <!-- Vue js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="/__/firebase/8.2.7/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/8.2.7/firebase-auth.js"></script>
+    <!-- Initialize Firebase -->
+    <!-- <script src="/__/firebase/init.js?useEmulator=true"></script> -->
+    <script src="/__/firebase/init.js"></script>
+
+    <!-- App form pay js -->
+    <script src="../assets/js/form-pay.js"></script>
+
+</body>
+
+</html>

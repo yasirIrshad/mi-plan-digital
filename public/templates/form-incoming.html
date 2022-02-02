@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>Mi plan digital</title>
+    <meta content="Admin Dashboard" name="description" />
+    <meta content="ThemeDesign" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .card-header {
+            color: #6a91f0;
+            font-weight: 400;
+            background-color: transparent;
+        }
+
+        .custom-control-label::before {
+            top: .15rem;
+        }
+
+        .custom-control-label::after {
+            top: .15rem;
+        }
+
+        .custom-control-label {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        span.popover {
+            height: 15px;
+            width: 15px;
+            margin-left: 4px;
+            background-color: #9d9d9d;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Begin page -->
+    <div class="container-fluid" id="formIncoming">
+
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+                <div class="alert alert-danger mb-0 mt-3 mt-md-5" role="alert" v-if="showAuthMsg">
+                    <strong>Oh seguridad!</strong> debe estar logueado para poder usar esta app.
+                </div>
+
+                <form class="mt-3 mt-md-5" v-if="!showAuthMsg">
+
+                    <div class="card">
+                        <h5 class="card-header mt-0">INGRESOS FABIO</h5>
+                        <div class="card-body">
+
+                            <div class="form-group mb-0">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" :id="model.employee.id" :name="model.employee.radioId" @click="uncheck(model.employee.id)" :value="model.employee.id" v-model="previousChecked.employee_enEmployee" class="custom-control-input">
+                                        <label class="custom-control-label" :for="model.employee.id">
+                                            {{model.employee.name}}
+                                            <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Salario bruto mensual percibido por tu empleo. No incluyas primas o salario de navidad.">?</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap" v-if="checkedEmployee">
+                                        <input type="text" placeholder="Salario /mes" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Bonos /año" data-mask="$ 9,999,999,999,999">
+                                        <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="left" data-content="Corresponde a bonificaciones y/o comisiones fuera de la establecidas por ley.  Ingresa un valor promedio anual.">?</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" :id="model.unEmployee.id" :name="model.unEmployee.radioId" @click="uncheck(model.unEmployee.id)" :value="model.unEmployee.id" v-model="previousChecked.employee_enEmployee" class="custom-control-input">
+                                        <label class="custom-control-label" :for="model.unEmployee.id">{{model.unEmployee.name}}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap" v-if="checkedUnEmployee">
+                                        <input type="text" placeholder="Salario /mes" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Bonos /año" data-mask="$ 9,999,999,999,999">
+                                        <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="left" data-content="Corresponde a bonificaciones y/o comisiones fuera de la establecidas por ley.  Ingresa un valor promedio anual.">?</span>
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" @click="uncheck(model.independent.id)" :value="model.independent.id" v-model="previousChecked.independent" class="custom-control-input" :id="model.independent.id">
+                                    <label class="custom-control-label" :for="model.independent.id">{{model.independent.name}}</label>
+                                    <div class="my-2" v-if="checkedIndependents">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" @click="uncheck(model.independent.children.simple.id)" :value="model.independent.children.simple.id" v-model="previousChecked.independent_simple_general" :id="model.independent.children.simple.id" :name="model.independent.children.simple.radioId" class="custom-control-input">
+                                                <label class="custom-control-label" :for="model.independent.children.simple.id">
+                                                    {{model.independent.children.simple.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Aplicar si la sumatoria de tus ingresos anuales totales (incluyendo los del empleo y otros) es inferior a $ 8,700,000 o tus compras anuales no superen los $ 40,000,000.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex" v-if="checkedIndependentSimple">
+                                                <input type="text" placeholder="Bruto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" @click="uncheck(model.independent.children.general.id)" :value="model.independent.children.general.id" v-model="previousChecked.independent_simple_general" :id="model.independent.children.general.id" :name="model.independent.children.general.radioId" class="custom-control-input">
+                                                <label class="custom-control-label" :for="model.independent.children.general.id">
+                                                    {{model.independent.children.general.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Aplicar si no estás en régimen simplificado. Ingreso mensual descontado gastos deducibles.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex" v-if="checkedIndependentGeneral">
+                                                <input type="text" placeholder="Neto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" @click="uncheck(model.others.id)" :value="model.others.id" v-model="previousChecked.others" class="custom-control-input" :id="model.others.id">
+                                    <label class="custom-control-label" :for="model.others.id">{{model.others.name}}</label>
+                                    <div class="my-2" v-if="checkedOthers">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheck(model.others.children.pensions.id)" :value="model.others.children.pensions.id" v-model="previousChecked.others_pensions" :id="model.others.children.pensions.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="model.others.children.pensions.id">
+                                                    {{model.others.children.pensions.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Mesada mensual.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex flex-wrap" v-if="checkedOthersPensions">
+                                                <input type="text" placeholder="Sobrevivencia" data-mask="$ 9,999,999,999,999">
+                                                <input class="ml-2" type="text" placeholder="Invalidez" data-mask="$ 9,999,999,999,999">
+                                                <input class="ml-2" type="text" placeholder="Retiro" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheck(model.others.children.exterior.id)" :value="model.others.children.exterior.id" v-model="previousChecked.others_exterior" :id="model.others.children.exterior.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="model.others.children.exterior.id">
+                                                    {{model.others.children.exterior.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Dinero percibido del exterior por ayudas familiares, rentas de activos en el exterior o pensión percibida en el exterior.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex mt-1" v-if="checkedOthersExterior">
+                                                <input type="text" placeholder="Promedio /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheck(model.others.children.rental.id)" :value="model.others.children.rental.id" v-model="previousChecked.others_rental" :id="model.others.children.rental.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="model.others.children.rental.id">
+                                                    {{model.others.children.rental.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Ingreso percibido por alquiler de activos a terceros descontando los gastos inherentes al mismo. Por ejemplo: ingreso mensual por alquiler de apartamento menos la cuota de mantenimiento.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex mt-1" v-if="checkedOthersRental">
+                                                <input type="text" placeholder="Neto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card mt-5">
+                        <h5 class="card-header mt-0">INGRESOS MARIEL</h5>
+                        <div class="card-body">
+
+                            <div class="form-group mb-0">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" :id="modelPartner.employee.id" :name="modelPartner.employee.radioId" @click="uncheckPartner(modelPartner.employee.id)" :value="modelPartner.employee.id" v-model="previousPartnerChecked.employee_enEmployee" class="custom-control-input">
+                                        <label class="custom-control-label" :for="modelPartner.employee.id">
+                                            {{modelPartner.employee.name}}
+                                            <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Salario bruto mensual percibido por tu empleo. No incluyas primas o salario de navidad.">?</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap" v-if="checkedPartnerEmployee">
+                                        <input type="text" placeholder="Salario /mes" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Bonos /año" data-mask="$ 9,999,999,999,999">
+                                        <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="left" data-content="Corresponde a bonificaciones y/o comisiones fuera de la establecidas por ley.  Ingresa un valor promedio anual.">?</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" :id="modelPartner.unEmployee.id" :name="modelPartner.unEmployee.radioId" @click="uncheckPartner(modelPartner.unEmployee.id)" :value="modelPartner.unEmployee.id" v-model="previousPartnerChecked.employee_enEmployee" class="custom-control-input">
+                                        <label class="custom-control-label" :for="modelPartner.unEmployee.id">{{modelPartner.unEmployee.name}}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap" v-if="checkedPartnerUnEmployee">
+                                        <input type="text" placeholder="Salario /mes" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Bonos /año" data-mask="$ 9,999,999,999,999">
+                                        <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="left" data-content="Corresponde a bonificaciones y/o comisiones fuera de la establecidas por ley.  Ingresa un valor promedio anual.">?</span>
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" @click="uncheckPartner(modelPartner.independent.id)" :value="modelPartner.independent.id" v-model="previousPartnerChecked.independent" class="custom-control-input" :id="modelPartner.independent.id">
+                                    <label class="custom-control-label" :for="modelPartner.independent.id">{{modelPartner.independent.name}}</label>
+                                    <div class="my-2" v-if="checkedPartnerIndependents">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" @click="uncheckPartner(modelPartner.independent.children.simple.id)" :value="modelPartner.independent.children.simple.id" v-model="previousPartnerChecked.independent_simple_general" :id="modelPartner.independent.children.simple.id" :name="modelPartner.independent.children.simple.radioId" class="custom-control-input">
+                                                <label class="custom-control-label" :for="modelPartner.independent.children.simple.id">
+                                                    {{modelPartner.independent.children.simple.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Aplicar si la sumatoria de tus ingresos anuales totales (incluyendo los del empleo y otros) es inferior a $ 8,700,000 o tus compras anuales no superen los $ 40,000,000.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex" v-if="checkedPartnerIndependentSimple">
+                                                <input type="text" placeholder="Bruto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" @click="uncheckPartner(modelPartner.independent.children.general.id)" :value="modelPartner.independent.children.general.id" v-model="previousPartnerChecked.independent_simple_general" :id="modelPartner.independent.children.general.id" :name="modelPartner.independent.children.general.radioId" class="custom-control-input">
+                                                <label class="custom-control-label" :for="modelPartner.independent.children.general.id">
+                                                    {{modelPartner.independent.children.general.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Aplicar si no estás en régimen simplificado. Ingreso mensual descontado gastos deducibles.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex" v-if="checkedPartnerIndependentGeneral">
+                                                <input type="text" placeholder="Neto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" @click="uncheckPartner(modelPartner.others.id)" :value="modelPartner.others.id" v-model="previousPartnerChecked.others" class="custom-control-input" :id="modelPartner.others.id">
+                                    <label class="custom-control-label" :for="modelPartner.others.id">{{modelPartner.others.name}}</label>
+                                    <div class="my-2" v-if="checkedPartnerOthers">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheckPartner(modelPartner.others.children.pensions.id)" :value="modelPartner.others.children.pensions.id" v-model="previousPartnerChecked.others_pensions" :id="modelPartner.others.children.pensions.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="modelPartner.others.children.pensions.id">
+                                                    {{modelPartner.others.children.pensions.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Mesada mensual.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex flex-wrap" v-if="checkedPartnerOthersPensions">
+                                                <input type="text" placeholder="Sobrevivencia" data-mask="$ 9,999,999,999,999">
+                                                <input class="ml-2" type="text" placeholder="Invalidez" data-mask="$ 9,999,999,999,999">
+                                                <input class="ml-2" type="text" placeholder="Retiro" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheckPartner(modelPartner.others.children.exterior.id)" :value="modelPartner.others.children.exterior.id" v-model="previousPartnerChecked.others_exterior" :id="modelPartner.others.children.exterior.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="modelPartner.others.children.exterior.id">
+                                                    {{modelPartner.others.children.exterior.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Dinero percibido del exterior por ayudas familiares, rentas de activos en el exterior o pensión percibida en el exterior.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex mt-1" v-if="checkedPartnerOthersExterior">
+                                                <input type="text" placeholder="Promedio /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" @click="uncheckPartner(modelPartner.others.children.rental.id)" :value="modelPartner.others.children.rental.id" v-model="previousPartnerChecked.others_rental" :id="modelPartner.others.children.rental.id" class="custom-control-input">
+                                                <label class="custom-control-label" :for="modelPartner.others.children.rental.id">
+                                                    {{modelPartner.others.children.rental.name}}
+                                                    <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Ingreso percibido por alquiler de activos a terceros descontando los gastos inherentes al mismo. Por ejemplo: ingreso mensual por alquiler de apartamento menos la cuota de mantenimiento.">?</span>
+                                                </label>
+                                            </div>
+                                            <div class="d-flex mt-1" v-if="checkedPartnerOthersRental">
+                                                <input type="text" placeholder="Neto /mes" data-mask="$ 9,999,999,999,999">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" :id="modelPartner.nothing.id" :name="modelPartner.nothing.radioId" @click="uncheckPartner(modelPartner.nothing.id)" :value="modelPartner.nothing.id" v-model="previousPartnerChecked.nothing" class="custom-control-input">
+                                    <label class="custom-control-label" :for="modelPartner.nothing.id">{{modelPartner.nothing.name}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-primary">Continuar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- jQuery  -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/detect.js"></script>
+    <script src="../assets/js/fastclick.js"></script>
+    <script src="../assets/js/jquery.slimscroll.js"></script>
+    <script src="../assets/js/jquery.blockUI.js"></script>
+    <script src="../assets/js/waves.js"></script>
+    <script src="../assets/js/jquery.nicescroll.js"></script>
+    <script src="../assets/js/jquery.scrollTo.min.js"></script>
+
+    <!-- Bootstrap inputmask js -->
+    <script src="../assets/js/bootstrap-inputmask.min.js"></script>
+
+    <!-- App js -->
+    <script src="../assets/js/app.js"></script>
+
+    <!-- Vue js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <!-- <script src="__/firebase/8.2.7/firebase-app.js"></script> -->
+    <!-- Add Firebase products that you want to use -->
+    <!-- <script src="__/firebase/8.2.7/firebase-auth.js"></script> -->
+    <!-- Initialize Firebase -->
+    <!-- <script src="/__/firebase/init.js?useEmulator=true"></script> -->
+    <!-- <script src="__/firebase/init.js"></script> -->
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+
+<!-- Add Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-functions.js"></script>
+
+    <!-- App Auth js -->
+    <script src="../assets/js/form-incoming.js"></script>
+
+</body>
+
+</html>

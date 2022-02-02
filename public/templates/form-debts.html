@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>Mi plan digital</title>
+    <meta content="Admin Dashboard" name="description" />
+    <meta content="ThemeDesign" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .card-header {
+            color: #6a91f0;
+            font-weight: 400;
+            background-color: transparent;
+        }
+
+        .custom-control-label::before {
+            top: .15rem;
+        }
+
+        .custom-control-label::after {
+            top: .15rem;
+        }
+
+        .custom-control-label {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        span.popover {
+            height: 15px;
+            width: 15px;
+            margin-left: 4px;
+            background-color: #9d9d9d;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Begin page -->
+    <div class="container-fluid" id="formDebts">
+
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-8 offset-md-1 offset-lg-2">
+
+                <div class="alert alert-danger mb-0 mt-3 mt-md-5" role="alert" v-if="showAuthMsg">
+                    <strong>Oh seguridad!</strong> debe estar logueado para poder usar esta app.
+                </div>
+
+                <form class="mt-3 mt-md-5" v-if="!showAuthMsg">
+
+                    <div class="card">
+                        <h5 class="card-header mt-0">DEUDAS</h5>
+                        <div class="card-body">
+
+                            <div class="form-group mb-0">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" :id="model.nothing.id" :name="model.nothing.id" @click="uncheck(model.nothing.id)" :value="model.nothing.id" v-model="previousChecked.nothing" class="custom-control-input">
+                                    <label class="custom-control-label" :for="model.nothing.id">{{model.nothing.name}}</label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" @click="uncheck(model.mortgageLoans.id)" :value="model.mortgageLoans.id" v-model="previousChecked.mortgageLoans" class="custom-control-input" :id="model.mortgageLoans.id">
+                                        <label class="custom-control-label" :for="model.mortgageLoans.id">{{model.mortgageLoans.name}}</label>
+                                    </div>
+                                    <div class="d-flex mt-1" v-if="checkedMortgageLoans">
+                                        <input type="text" placeholder="Saldo Actual" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Cuota mensual" data-mask="$ 9,999,999,999,999" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" @click="uncheck(model.vehicleLoans.id)" :value="model.vehicleLoans.id" v-model="previousChecked.vehicleLoans" class="custom-control-input" :id="model.vehicleLoans.id">
+                                        <label class="custom-control-label" :for="model.vehicleLoans.id">{{model.vehicleLoans.name}}</label>
+                                    </div>
+                                    <div class="d-flex mt-1" v-if="checkedVehicleLoans">
+                                        <input type="text" placeholder="Saldo Actual" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Cuota mensual" data-mask="$ 9,999,999,999,999" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" @click="uncheck(model.personalLoans.id)" :value="model.personalLoans.id" v-model="previousChecked.personalLoans" class="custom-control-input" :id="model.personalLoans.id">
+                                        <label class="custom-control-label" :for="model.personalLoans.id">
+                                            {{model.personalLoans.name}}
+                                            <span class="popover waves-effect" data-container="body" data-toggle="popover" data-placement="top" data-content="Incluye créditos de consumo con entidades financieras y no financieras, préstamos de particulares, préstamos de casas de empeño, adelantos de salario, sobregiros bancarios, entre otros.">?</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex mt-1" v-if="checkedPersonalLoans">
+                                        <input type="text" placeholder="Saldo Actual" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Cuota mensual" data-mask="$ 9,999,999,999,999" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" @click="uncheck(model.educationLoans.id)" :value="model.educationLoans.id" v-model="previousChecked.educationLoans" class="custom-control-input" :id="model.educationLoans.id">
+                                        <label class="custom-control-label" :for="model.educationLoans.id">{{model.educationLoans.name}}</label>
+                                    </div>
+                                    <div class="d-flex mt-1" v-if="checkedEducationLoans">
+                                        <input type="text" placeholder="Saldo Actual" data-mask="$ 9,999,999,999,999">
+                                        <input class="ml-2" type="text" placeholder="Cuota mensual" data-mask="$ 9,999,999,999,999" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-primary">Continuar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- jQuery  -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/detect.js"></script>
+    <script src="../assets/js/fastclick.js"></script>
+    <script src="../assets/js/jquery.slimscroll.js"></script>
+    <script src="../assets/js/jquery.blockUI.js"></script>
+    <script src="../assets/js/waves.js"></script>
+    <script src="../assets/js/jquery.nicescroll.js"></script>
+    <script src="../assets/js/jquery.scrollTo.min.js"></script>
+
+    <!-- Bootstrap inputmask js -->
+    <script src="../assets/js/bootstrap-inputmask.min.js"></script>
+
+    <!-- App js -->
+    <script src="../assets/js/app.js"></script>
+
+    <!-- Vue js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="/__/firebase/8.2.7/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/8.2.7/firebase-auth.js"></script>
+    <!-- Initialize Firebase -->
+    <!-- <script src="/__/firebase/init.js?useEmulator=true"></script> -->
+    <script src="/__/firebase/init.js"></script>
+
+    <!-- App Auth js -->
+    <script src="../assets/js/form-debts.js"></script>
+
+</body>
+
+</html>
